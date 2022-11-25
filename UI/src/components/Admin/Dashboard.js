@@ -139,7 +139,7 @@ function Dashboard() {
       let arr = res.data.issues_types;
       setissuedata(arr);
       setissuestage(issuestage);
-      setissuedata(res.issuedata.issues);
+      // setissuedata(res.issuedata.issues);
     }
   };
   return (

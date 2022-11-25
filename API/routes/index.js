@@ -63,11 +63,11 @@ router.put("/issue-types/:id", async (req, res) => {
       // console.log()
     });
     console.log("test!!!!!!!!!!!!!!!!!!!!!!!!", issueType);
-    let filter = {_id:  mongodb.ObjectId(req.params.id) }  
-    let update = {issueType : req.body.issue_type} 
+    let filter = { _id: mongodb.ObjectId(req.params.id) };
+    let update = { issueType: req.body.issue_type };
 
     if (issueType) {
-      await issueTypeModel.updateOne(filter,update);
+      await issueTypeModel.updateOne(filter, update);
 
       // issueType.issue_type = req.body.issue_type;
       // await issueType.save();
@@ -153,7 +153,7 @@ router.get("/issues/:id", async (req, res) => {
   try {
     const id = req.params.id;
     console.log("id---->", id);
-    let issue = await issueModel.find({ id });
+    let issue = await issueModel.find({ zen_id: id });
     res.send({
       statusCode: 200,
       issue,
@@ -169,15 +169,11 @@ router.get("/issues/:id", async (req, res) => {
 });
 
 const SendGridMail = async () => {
-  console.log("tes1111=>>>>>>>>>>>>>>>>>");
-  const body = "This is a test email using SendGrid from Node.js";
-  const url = process.env.base_url;
-
   const options = {
     to: "mailtomichael1@gmail.com",
     from: "no_reply@atg.money",
-    subject: "Test email with Node.js and SendGrid",
-    html: `Issue has been moved to In-Progress.You will receive a message when issue gets closed`,
+    subject: "Open InProgress",
+    html: `Issue has been moved to In-Progress.You will receive a message when issue gets closed!!!!!!!`,
   };
 
   try {
@@ -193,14 +189,10 @@ const SendGridMail = async () => {
 };
 
 const SendGridMail1 = async () => {
-  console.log("tes1111=>>>>>>>>>>>>>>>>>");
-  const body = "This is a test email using SendGrid from Node.js";
-  const url = process.env.base_url;
-
   const options = {
     to: "mailtomichael1@gmail.com",
     from: "no_reply@atg.money",
-    subject: "Test email with Node.js and SendGrid",
+    subject: "Issue Closed ",
     html: `Issue has been Closed!`,
   };
 
@@ -256,7 +248,7 @@ router.put("/change-status/:id", async (req, res) => {
   try {
     console.log(req.params);
     let issue = await issueModel.findOne({
-      id: req.params.zen_id,
+      zen_id: req.params.id,
     });
 
     console.log("test1!!!!", issue);

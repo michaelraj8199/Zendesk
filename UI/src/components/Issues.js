@@ -14,8 +14,9 @@ function Issues() {
   let [comment, setComment] = useState("");
   let navigate = useNavigate();
 
-  let handleLoadTicket = async () => {
-    let res = await axios.get(`${commonContext.apiurl}/issues/${params.zen_id}`);
+  let handleLoadTicket = async (id) => {
+    console.log("tttt", params);
+    let res = await axios.get(`${commonContext.apiurl}/issues/${params.id}`);
     if (res.data.statusCode === 200) {
       setData(res.data.issue[0]);
       setComment(res.data.issue[0].comments);
@@ -28,7 +29,7 @@ function Issues() {
 
   let nextStage = async (stage) => {
     let res = await axios.put(
-      `${commonContext.apiurl}/change-status/${params.zen_id}`,
+      `${commonContext.apiurl}/change-status/${params.id}`,
       {
         comments: comment,
       }
@@ -39,118 +40,139 @@ function Issues() {
       });
 
       // navigate("/feedback");
-    }else{
+    } else {
       toast.error("Error  mailid ", {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
   };
 
-
   const issuefeedback = () => {
     navigate("/feedback");
   };
   return (
     <>
-      <div className="col-5 mx-auto">
-        {data !== undefined ? (
-          <>
-            <div style={{ textAlign: "left", paddingTop: "20px" }}>
-              <h2 style={{ textAlign: "center" }}>Welcome to Zen Desk!</h2>
-              <h5>
-                <strong>Issue Title :</strong> {data.issueTitle}
-              </h5>
-              <div>
-                <strong>Issue Type :</strong> {data.issueType}
-              </div>
-              <div>
-                <strong>Issue Description :</strong> {data.issueDescription}
-              </div>
-              <div>
-                <strong>Mobile :</strong> {data.mobile}
-              </div>
-              <div>
-                <strong>Status :</strong>
-                <span
-                  style={
-                    data.status === "Open"
-                      ? { color: "red" }
-                      : data.status === "In-Progress"
-                      ? { color: "#d4d435" }
-                      : { color: "green" }
-                  }
-                >
-                  {data.status}
-                </span>
-                <div>
-                  <strong>Created Date : </strong>
-                  {data.createdAt}
-                </div>
-                {data.status === "In-Progress" ? (
-                  <div>
-                    <strong>Opend Date : </strong>
-                    {data.inProgressDate}
-                  </div>
-                ) : (
-                  <></>
-                )}
-                {data.status === "Clossed" ? (
-                  <div>
-                    <strong>Closed Date : </strong>
-                    {data.closedDate}
-                  </div>
-                ) : (
-                  <></>
-                )}
-                <div>
-                  <strong>Comment :</strong>
-                  <input
-                    type={"textArea"}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                  />
-                </div>
-                <br></br>
-              </div>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  navigate("/dashboard");
-                }}
-              >
-                Go Back to Dashboard
-              </Button>
-              &nbsp;
-              {data.status === "Open" ? (
-                <Button
-                  variant="warning"
-                  onClick={() => {
-                    nextStage();
-                  }}
-                >
-                  In-Progress
-                </Button>
-              ) : data.status === "In-Progress" ? (
-                <Button
-                  variant="success"
-                  onClick={() => {
-                    nextStage();
-                    issuefeedback();
+      <div
+        className=" DisplayFlex pb-80
+       JustifyCenter AlignCenter formbody "
+      >
+        <div className=" container ">
+          <div className="row  JustifyCenter ">
+            <div className="loginblock col-md-4 bg-white rounded shadow">
+              <div className="loginbg  mt-2 fs32 rounded">Issue Status</div>
 
-                  }}
-                >
-                  Close
-                </Button>
-              ) : (
-                <></>
-              )}
+              <div className="p-2">
+                {data !== undefined ? (
+                  <>
+                    <div className="Issues_table">
+                      <div>
+                        <label>Issue Title :</label> {data.issueTitle}
+                      </div>
+                      <div>
+                        <label>Issue Type :</label> {data.issueType}
+                      </div>
+                      <div>
+                        <label>Issue Description :</label>{" "}
+                        {data.issueDescription}
+                      </div>
+                      <div>
+                        <label>Mobile :</label> {data.mobile}
+                      </div>
+                      <div>
+                        <label>Status :</label>
+                        <span
+                          style={
+                            data.status === "Open"
+                              ? { color: "red" }
+                              : data.status === "In-Progress"
+                              ? { color: "#d4d435" }
+                              : { color: "green" }
+                          }
+                        >
+                          {data.status}
+                        </span>
+                        <div>
+                          <label>Created Date : </label>
+                          {data.createdAt}
+                        </div>
+                        {data.status === "In-Progress" ? (
+                          <div>
+                            <label>Opend Date : </label>
+                            {data.inProgressDate}
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        {data.status === "Clossed" ? (
+                          <div>
+                            <label>Closed Date : </label>
+                            {data.closedDate}
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        <div className="row AlignCenter">
+                          <label className="col-md-3 ms-4 p-0">Comment:</label>
+                          <div className="col-md-8">
+                            <textarea
+                              className="form-control "
+                              type={"textArea"}
+                              value={comment}
+                              onChange={(e) => setComment(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                        <br></br>
+                      </div>
+                      <div className="row JustifyCenter mt-2">
+                        <div className="text-center col-md-4 pb-3">
+                          <Button
+                            className="searchbtn m-0"
+                            onClick={() => {
+                              navigate("/dashboard");
+                            }}
+                          >
+                            Back
+                          </Button>
+                        </div>
+
+                        {data.status === "Open" ? (
+                          <div className="col-md-5">
+                            <Button
+                              className="signinbtn m-0"
+                              onClick={() => {
+                                nextStage();
+                              }}
+                            >
+                              In-Progress
+                            </Button>
+                          </div>
+                        ) : data.status === "In-Progress" ? (
+                          <div className="col-md-3">
+                            <Button
+                              className="signinbtn m-0"
+                              onClick={() => {
+                                nextStage();
+                                issuefeedback();
+                              }}
+                            >
+                              Close
+                            </Button>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
+                <ToastContainer />
+              </div>
             </div>
-          </>
-        ) : (
-          <></>
-        )}
-      <ToastContainer />
-
+          </div>
+        </div>
       </div>
     </>
   );

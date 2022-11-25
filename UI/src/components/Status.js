@@ -3,16 +3,20 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { CommonContext } from "../App";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function Status() {
   let commonContext = useContext(CommonContext);
   let [data, setData] = useState(undefined);
   let [ticket, setTicket] = useState("");
 
   let handleLoadTicket = async () => {
+    console.log("ttdrdrtrtrdtrt")
     let res = await axios.get(`${commonContext.apiurl}/issues/${ticket}`);
     if (res.data.statusCode === 200) {
       setData(res.data.issue[0]);
+    }else{
+      console.error("ttttr")
     }
   };
   return (
